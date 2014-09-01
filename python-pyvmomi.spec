@@ -2,7 +2,7 @@
 %global _with_python3 1
 %endif
 
-%global pyvmomi_version 5.5.0-2014.1
+%global pyvmomi_version 5.5.0-2014.1.1
 %global pyvmomi_rpmversion %(echo %{pyvmomi_version} | tr "-" ".")
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
@@ -13,7 +13,7 @@
 
 Name:       python-pyvmomi
 Version:    %{pyvmomi_rpmversion}
-Release:    2%{?dist}
+Release:    1%{?dist}
 Summary:    VMware vSphere Python SDK
 
 Group:      Development/Languages
@@ -21,7 +21,7 @@ License:    ASL 2.0
 URL:        https://pypi.python.org/pypi/pyvmomi
 Source0:    https://pypi.python.org/packages/source/p/pyvmomi/pyvmomi-%{pyvmomi_version}.tar.gz
 
-BuildRequires:  python2-devel python-setuptools PyYAML
+BuildRequires:  python2-devel python-setuptools
 Requires:   python-requests python-six
 BuildArch:      noarch
 
@@ -67,19 +67,23 @@ popd
 
 %{__python2} setup.py install --skip-build --root $RPM_BUILD_ROOT
 
-%check
-%{__python2} setup.py test
-
-%if 0%{?_with_python3}
-pushd %{py3dir}
-%{__python3} setup.py test
-popd
-%endif # with_python3
+# Leaving this out until we get the vcrpy and contextdecorator deps
+# packaged and added into fedora.
+#%check
+#%{__python2} setup.py test
+#
+#%if 0%{?_with_python3}
+#pushd %{py3dir}
+#%{__python3} setup.py test
+#popd
+#%endif # with_python3
 
 
 %files
 %defattr(-,root,root,-)
-%doc README.md
+%{!?_licensedir:%global license %%doc}
+%license LICENSE.txt
+%doc README.rst NOTICE.txt
 %{python_sitelib}/*.egg-info
 %dir %{python_sitelib}/pyVmomi
 %dir %{python_sitelib}/pyVim
@@ -88,7 +92,9 @@ popd
 
 %if 0%{?_with_python3}
 %files -n python3-pyvmomi
-%doc README.md
+%{!?_licensedir:%global license %%doc}
+%license LICENSE.txt
+%doc README.rst NOTICE.txt
 %{python3_sitelib}/*.egg-info
 %dir %{python3_sitelib}/pyVmomi
 %dir %{python3_sitelib}/pyVim
@@ -97,10 +103,12 @@ popd
 %endif
 
 
-
 %changelog
+* Sun Aug 31 2014 Michael Rice <michael@michaelrice.org> - 5.5.0.2014.1.1-1
+- Bugfix release from upstream.
+
 * Fri Aug 22 2014 Michael Rice <michael@michaelrice.org> - 5.5.0.2014.1-2
-- Changes to spec file based on bugzilla package review
+- Changes to spec file based on bugzilla package review.
 
 * Wed Aug 20 2014 Michael Rice <michael@michaelrice.org> - 5.5.0.2014.1-1
-- Initial RPM build
+- Initial RPM build.
