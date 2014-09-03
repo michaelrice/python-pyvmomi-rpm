@@ -24,6 +24,13 @@ Source0:    https://pypi.python.org/packages/source/p/pyvmomi/pyvmomi-%{pyvmomi_
 BuildRequires:  python2-devel python-setuptools
 Requires:   python-requests python-six
 BuildArch:      noarch
+# This patch is needed as a temporary workaround to keep files
+# from being added to /usr Upstream has accepted this patch
+# but is holding off on another bug release for now
+# it also makes the rpmlint warnings about scripts being
+# non executable go away by removing the #! line from the
+# offending files.
+Patch0:     setuppy.patch
 
 %description
 pyVmomi is the Python SDK for the VMware vSphere API that allows you to manage 
@@ -44,6 +51,8 @@ ESX, ESXi, and vCenter.
 
 %prep
 %setup -q -n pyvmomi-%{pyvmomi_version}
+# Apply temp patch
+%patch0 -p1
 %if 0%{?_with_python3}
 rm -rf %{py3dir}
 cp -a . %{py3dir}
