@@ -11,26 +11,25 @@
 %{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 
-Name:       python-pyvmomi
-Version:    %{pyvmomi_rpmversion}
-Release:    1%{?dist}
-Summary:    VMware vSphere Python SDK
+Name:             python-pyvmomi
+Version:          %{pyvmomi_rpmversion}
+Release:          1%{?dist}
+Summary:          VMware vSphere Python SDK
+Group:            Development/Languages
+License:          ASL 2.0
+URL:              https://pypi.python.org/pypi/pyvmomi
+Source0:          https://pypi.python.org/packages/source/p/pyvmomi/pyvmomi-%{pyvmomi_version}.tar.gz
 
-Group:      Development/Languages
-License:    ASL 2.0
-URL:        https://pypi.python.org/pypi/pyvmomi
-Source0:    https://pypi.python.org/packages/source/p/pyvmomi/pyvmomi-%{pyvmomi_version}.tar.gz
-
-BuildRequires:  python2-devel python-setuptools
-Requires:   python-requests python-six
-BuildArch:      noarch
+BuildRequires:    python2-devel python-setuptools
+Requires:         python-requests python-six
+BuildArch:        noarch
 # This patch is needed as a temporary workaround to keep files
 # from being added to /usr Upstream has accepted this patch
 # but is holding off on another bug release for now
 # it also makes the rpmlint warnings about scripts being
 # non executable go away by removing the #! line from the
 # offending files.
-Patch0:     setuppy.patch
+Patch0:           setuppy.patch
 
 %description
 pyVmomi is the Python SDK for the VMware vSphere API that allows you to manage 
@@ -39,9 +38,9 @@ ESX, ESXi, and vCenter.
 
 %if 0%{?_with_python3}
 %package -n python3-pyvmomi
-Summary: VMware vSphere Python SDK
-BuildRequires:  python3-devel python3-setuptools
-Requires: python3-requests python3-six
+Summary:          VMware vSphere Python SDK
+BuildRequires:    python3-devel python3-setuptools
+Requires:         python3-requests python3-six
 
 %description -n python3-pyvmomi
 pyVmomi is the Python SDK for the VMware vSphere API that allows you to manage 
