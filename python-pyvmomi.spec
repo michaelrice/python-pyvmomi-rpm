@@ -5,15 +5,15 @@
 %global pyvmomi_version 5.5.0-2014.1.1
 %global pyvmomi_rpmversion %(echo %{pyvmomi_version} | tr "-" ".")
 
+%{!?_licensedir:%global license %%doc}
 %if 0%{?rhel} && 0%{?rhel} <= 6
 %{!?__python2: %global __python2 /usr/bin/python2}
 %{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-%{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 
 Name:             python-pyvmomi
 Version:          %{pyvmomi_rpmversion}
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          VMware vSphere Python SDK
 Group:            Development/Languages
 License:          ASL 2.0
@@ -89,29 +89,22 @@ popd
 
 %files
 %defattr(-,root,root,-)
-%{!?_licensedir:%global license %%doc}
 %license LICENSE.txt
 %doc README.rst NOTICE.txt
-%{python_sitelib}/*.egg-info
-%dir %{python_sitelib}/pyVmomi
-%dir %{python_sitelib}/pyVim
-%{python_sitelib}/pyVmomi/*
-%{python_sitelib}/pyVim/*
+%{python_sitelib}/*
 
 %if 0%{?_with_python3}
 %files -n python3-pyvmomi
-%{!?_licensedir:%global license %%doc}
 %license LICENSE.txt
 %doc README.rst NOTICE.txt
-%{python3_sitelib}/*.egg-info
-%dir %{python3_sitelib}/pyVmomi
-%dir %{python3_sitelib}/pyVim
-%{python3_sitelib}/pyVmomi/*
-%{python3_sitelib}/pyVim/*
+%{python3_sitelib}/*
 %endif
 
 
 %changelog
+* Thu Sep 18 2014 Michael Rice <michael@michaelrice.org> - 5.5.0.2014.1.1-2
+- Changes to spec from review suggestions
+
 * Sun Aug 31 2014 Michael Rice <michael@michaelrice.org> - 5.5.0.2014.1.1-1
 - Bugfix release from upstream.
 
